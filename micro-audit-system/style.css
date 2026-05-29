@@ -78,7 +78,9 @@ body{
 .audit-form{
     display:flex;
 
-    gap:15px;
+    flex-direction:column;
+
+    gap:16px;
 
     margin-bottom:30px;
 }
@@ -100,6 +102,25 @@ body{
     font-size:16px;
 
     outline:none;
+}
+
+#prioritySelect,
+#dueDateInput{
+
+    padding:16px;
+
+    border:none;
+
+    border-radius:16px;
+
+    outline:none;
+
+    background:white;
+
+    box-shadow:
+        0px 4px 20px rgba(0,0,0,0.05);
+
+    font-size:16px;
 }
 
 .audit-form button{
@@ -179,6 +200,8 @@ body{
 
     backdrop-filter:blur(12px);
 
+    border:2px solid transparent;
+
     border-radius:20px;
 
     padding:20px;
@@ -193,6 +216,15 @@ body{
         0px 4px 20px rgba(0,0,0,0.06);
 
     transition:0.3s ease;
+}
+
+.audit-card.overdue-card{
+    border-color:#ef4444;
+
+    background:rgba(254,242,242,0.9);
+
+    box-shadow:
+        0px 8px 28px rgba(239,68,68,0.18);
 }
 
 .audit-card:hover{
@@ -356,4 +388,127 @@ body.dark-mode .filter-btn{
     background:rgba(15,23,42,0.75);
 
     color:white;
+}
+
+.audit-meta{
+
+    display:flex;
+
+    justify-content:flex-start;
+
+    align-items:center;
+
+    gap:10px;
+
+    flex-wrap:wrap;
+
+    margin:10px 0;
+}
+
+.priority-badge{
+
+    padding:6px 12px;
+
+    border-radius:999px;
+
+    color:white;
+
+    font-size:13px;
+
+    font-weight:600;
+}
+
+.priority-badge.high{
+    background:#ef4444;
+}
+
+.priority-badge.medium{
+    background:#f59e0b;
+}
+
+.priority-badge.low{
+    background:#10b981;
+}
+
+.due-date{
+
+    font-size:14px;
+
+    color:#64748b;
+}
+
+.status-badge{
+
+    padding:6px 12px;
+
+    border-radius:999px;
+
+    color:white;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    letter-spacing:0.4px;
+}
+
+.overdue-badge{
+    background:#dc2626;
+}
+
+.today-badge{
+    background:#2563eb;
+}
+
+.soon-badge{
+    background:#f59e0b;
+}
+
+.due-message{
+    margin-bottom:8px;
+
+    font-weight:600;
+}
+
+.due-message.overdue-badge{
+    background:transparent;
+
+    color:#dc2626;
+}
+
+.due-message.today-badge{
+    background:transparent;
+
+    color:#2563eb;
+}
+
+.due-message.soon-badge{
+    background:transparent;
+
+    color:#b45309;
+}
+
+body.dark-mode .audit-card.overdue-card{
+    border-color:#f87171;
+
+    background:rgba(69,10,10,0.55);
+
+    box-shadow:
+        0px 8px 28px rgba(248,113,113,0.12);
+}
+
+body.dark-mode .due-date{
+    color:#cbd5e1;
+}
+
+body.dark-mode .due-message.overdue-badge{
+    color:#fca5a5;
+}
+
+body.dark-mode .due-message.today-badge{
+    color:#93c5fd;
+}
+
+body.dark-mode .due-message.soon-badge{
+    color:#fcd34d;
 }
