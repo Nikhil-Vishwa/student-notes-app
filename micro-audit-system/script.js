@@ -83,6 +83,107 @@ const audit = {
     renderAudits();
 }
 
+/* Due Date Helpers */
+
+function parseLocalDate(dateValue){
+
+    if(!dateValue){
+
+        return null;
+    }
+
+    const dateParts = dateValue.split("-");
+
+    return new Date(
+        Number(dateParts[0]),
+        Number(dateParts[1]) - 1,
+        Number(dateParts[2])
+    );
+}
+
+function getTodayDate(){
+
+    const today = new Date();
+
+    return new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate()
+    );
+}
+
+function getDueDateInfo(audit){
+
+    if(!audit.dueDate){
+
+        return {
+            badge: "",
+            badgeClass: "",
+            message: ""
+        };
+    }
+
+    const dueDate = parseLocalDate(audit.dueDate);
+
+    const today = getTodayDate();
+
+    const millisecondsPerDay = 1000 * 60 * 60 * 24;
+
+    const daysDifference = Math.round(
+        (dueDate - today) / millisecondsPerDay
+    );
+
+    if(daysDifference === 0){
+
+        return {
+            badge: "DUE TODAY",
+            badgeClass: "today-badge",
+            message: "Due today"
+        };
+    }
+
+    if(audit.status !== "pending"){
+
+        return {
+            badge: "",
+            badgeClass: "",
+            message: ""
+        };
+    }
+
+    if(daysDifference < 0){
+
+        const overdueDays = Math.abs(daysDifference);
+
+        return {
+            badge: "OVERDUE",
+            badgeClass: "overdue-badge",
+            message:
+                overdueDays === 1
+                    ? "1 day overdue"
+                    : `${overdueDays} days overdue`
+        };
+    }
+
+    if(daysDifference <= 3){
+
+        return {
+            badge: "DUE SOON",
+            badgeClass: "soon-badge",
+            message:
+                daysDifference === 1
+                    ? "Due in 1 day"
+                    : `Due in ${daysDifference} days`
+        };
+    }
+
+    return {
+        badge: "",
+        badgeClass: "",
+        message: `Due in ${daysDifference} days`
+    };
+}
+
 /* Render Audits */
 
 function renderAudits(){
@@ -105,9 +206,13 @@ const filteredAudits = audits.filter((audit)=>{
 
 filteredAudits.forEach((audit)=>{
 
+        const dueDateInfo = getDueDateInfo(audit);
+
         const card = document.createElement("div");
 
-        card.className = "audit-card";
+        card.className = dueDateInfo.badge === "OVERDUE"
+            ? "audit-card overdue-card"
+            : "audit-card";
 
         card.innerHTML = `
 
@@ -134,7 +239,23 @@ filteredAudits.forEach((audit)=>{
 
             </span>
 
+            ${
+                dueDateInfo.badge
+                ? `<span class="status-badge ${dueDateInfo.badgeClass}">
+                    ${dueDateInfo.badge}
+                   </span>`
+                : ""
+            }
+
             </div>
+
+            ${
+                dueDateInfo.message
+                ? `<p class="due-message ${dueDateInfo.badgeClass}">
+                    ${dueDateInfo.message}
+                   </p>`
+                : ""
+            }
 
             <p>
             Status:
